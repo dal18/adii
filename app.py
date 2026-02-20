@@ -22,9 +22,14 @@ app.config['SECRET_KEY'] = os.environ.get('SECRET_KEY', 'your-secret-key-change-
 ADMIN_USERNAME = os.environ.get('ADMIN_USERNAME', 'admin')
 ADMIN_PASSWORD = os.environ.get('ADMIN_PASSWORD', 'admin123')
 
-# Initialize database on startup
-with app.app_context():
-    init_db()
+# Initialize database on startup (with error handling)
+try:
+    with app.app_context():
+        init_db()
+        print("Database initialized successfully.")
+except Exception as e:
+    print(f"Database initialization failed: {e}")
+    # Continue without database for now
 
 # ============================================================================
 # PUBLIC ROUTES (Viewer access - no login required)
