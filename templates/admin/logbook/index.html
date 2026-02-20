@@ -70,7 +70,15 @@
                     <td>{{ entry['contact_number'] }}</td>
                     <td>{{ entry['address'] or '-' }}</td>
                     <td>{{ entry['office'] or '-' }}</td>
-                    <td>{{ entry['signature'] or '-' }}</td>
+                    <td>
+                        {% if entry['signature'] %}
+                        <a href="{{ entry['signature'] }}" target="_blank">
+                            <img src="{{ entry['signature'] }}" alt="Signature" style="max-width: 60px; max-height: 30px; border: 1px solid #dee2e6; border-radius: 3px;">
+                        </a>
+                        {% else %}
+                        <span class="text-muted">-</span>
+                        {% endif %}
+                    </td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{{ url_for('admin_logbook_show', id=entry['id']) }}" class="btn btn-info" title="View">
