@@ -1,0 +1,35 @@
+==========================================
+FIREBASE DEPLOYMENT - COPY PASTE COMMANDS
+==========================================
+
+STEP 1: Install Firebase CLI
+-----------------------------
+npm install -g firebase-tools
+
+STEP 2: Login
+-------------
+firebase login
+
+STEP 3: Go to project folder
+-----------------------------
+cd c:\Users\pcuser\CascadeProjects\logbook-system
+
+STEP 4: Initialize Firebase
+-----------------------------
+firebase init
+
+(Select: Functions, Hosting, Python, public folder)
+
+STEP 5: Set environment variables
+-----------------------------------
+firebase functions:config:set secret.key="your-secret-key-here"
+firebase functions:config:set admin.username="admin"
+firebase functions:config:set admin.password="your-password-here"
+
+STEP 6: Deploy
+--------------
+firebase deploy --only functions
+
+==========================================
+YOUR APP URL WILL APPEAR AFTER DEPLOYMENT
+==========================================

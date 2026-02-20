@@ -1,0 +1,113 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}Entry #{{ entry['id'] }} - Logbook System{% endblock %}
+{% block nav_page_title %}Entry Details{% endblock %}
+{% block page_title %}Entry #{{ entry['id'] }} Details{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ url_for('admin_logbook_index') }}">Logbook</a></li>
+    <li class="breadcrumb-item active">Entry #{{ entry['id'] }}</li>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col-md-8">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Visitor Information</h3>
+                <div class="card-tools">
+                    <a href="{{ url_for('admin_logbook_edit', id=entry['id']) }}" class="btn btn-warning btn-sm">
+                        <i class="fas fa-edit mr-1"></i> Edit Entry
+                    </a>
+                </div>
+            </div>
+            <div class="card-body">
+                <table class="table table-bordered">
+                    <tr>
+                        <th width="30%">Date</th>
+                        <td>{{ entry['date'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Time</th>
+                        <td>{{ entry['time'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Full Name</th>
+                        <td><strong>{{ entry['name'] }}</strong></td>
+                    </tr>
+                    <tr>
+                        <th>Gender</th>
+                        <td>{{ entry['gender'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Age</th>
+                        <td>{{ entry['age'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Position/Title</th>
+                        <td>{{ entry['position'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Contact Number</th>
+                        <td>{{ entry['contact_number'] }}</td>
+                    </tr>
+                    <tr>
+                        <th>Purpose of Visit</th>
+                        <td><span class="badge badge-info">{{ entry['purpose'] }}</span></td>
+                    </tr>
+                    {% if entry.get('address') %}
+                    <tr>
+                        <th>Address</th>
+                        <td>{{ entry['address'] }}</td>
+                    </tr>
+                    {% endif %}
+                    {% if entry.get('office') %}
+                    <tr>
+                        <th>Office</th>
+                        <td>{{ entry['office'] }}</td>
+                    </tr>
+                    {% endif %}
+                    <tr>
+                        <th>Submitted At</th>
+                        <td>{{ entry['created_at'] }}</td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-4">
+        <div class="card">
+            <div class="card-header">
+                <h3 class="card-title">Electronic Signature</h3>
+            </div>
+            <div class="card-body text-center">
+                {% if entry['signature'] %}
+                <img src="{{ entry['signature'] }}" alt="Signature" style="max-width: 100%; border: 1px solid #dee2e6; border-radius: 5px; padding: 10px; background: #f8f9fa;">
+                {% else %}
+                <p class="text-muted">No signature available</p>
+                {% endif %}
+            </div>
+        </div>
+        
+        <div class="card mt-3">
+            <div class="card-header">
+                <h3 class="card-title">Actions</h3>
+            </div>
+            <div class="card-body">
+                <a href="{{ url_for('admin_logbook_edit', id=entry['id']) }}" class="btn btn-warning btn-block mb-2">
+                    <i class="fas fa-edit mr-1"></i> Edit Entry
+                </a>
+                <form id="delete-form" method="POST" action="{{ url_for('admin_logbook_delete', id=entry['id']) }}">
+                    <button type="button" class="btn btn-danger btn-block" onclick="confirmDelete('delete-form')">
+                        <i class="fas fa-trash mr-1"></i> Delete Entry
+                    </button>
+                </form>
+                <a href="{{ url_for('admin_logbook_index') }}" class="btn btn-secondary btn-block mt-2">
+                    <i class="fas fa-arrow-left mr-1"></i> Back to List
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

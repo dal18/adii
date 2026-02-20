@@ -1,0 +1,10 @@
+runtime: python311
+
+env_variables:
+  SECRET_KEY: "your-secret-key-change-in-production"
+  ADMIN_USERNAME: "admin"
+  ADMIN_PASSWORD: "admin123"
+
+automatic_scaling:
+  min_instances: 1
+  max_instances: 10

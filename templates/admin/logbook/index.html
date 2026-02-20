@@ -1,0 +1,96 @@
+{% extends "admin/layout.html" %}
+
+{% block title %}All Entries - Logbook System{% endblock %}
+{% block nav_page_title %}All Entries{% endblock %}
+{% block page_title %}{{ 'Today\'s Log' if filter_today else 'All Entries' }}{% endblock %}
+
+{% block breadcrumb %}
+    <li class="breadcrumb-item"><a href="{{ url_for('admin_logbook_index') }}">Logbook</a></li>
+    <li class="breadcrumb-item active">All Entries</li>
+{% endblock %}
+
+{% block content %}
+<div class="card">
+    <div class="card-header">
+        <h3 class="card-title">{{ 'Today\'s Logbook Entries' if filter_today else 'All Logbook Entries' }}</h3>
+        {% if not filter_today %}
+        <div class="card-tools">
+            <a href="{{ url_for('admin_export_excel') }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export All to Excel
+            </a>
+            <a href="{{ url_for('admin_logbook_index', filter='today') }}" class="btn btn-sm btn-info">
+                <i class="fas fa-calendar-day mr-1"></i> View Today Only
+            </a>
+        </div>
+        {% else %}
+        <div class="card-tools">
+            <a href="{{ url_for('admin_export_excel', filter='today') }}" class="btn btn-success btn-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export Today's to Excel
+            </a>
+            <a href="{{ url_for('admin_export_excel') }}" class="btn btn-primary btn-sm">
+                <i class="fas fa-file-excel mr-1"></i> Export All to Excel
+            </a>
+            <a href="{{ url_for('admin_logbook_index') }}" class="btn btn-sm btn-secondary">
+                <i class="fas fa-list mr-1"></i> View All Entries
+            </a>
+        </div>
+        {% endif %}
+    </div>
+    <div class="card-body">
+        {% if entries %}
+        <table class="table table-bordered table-striped data-table">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Date</th>
+                    <th>Time</th>
+                    <th>Name</th>
+                    <th>Gender</th>
+                    <th>Age</th>
+                    <th>Position</th>
+                    <th>Purpose</th>
+                    <th>Contact</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for entry in entries %}
+                <tr>
+                    <td>{{ entry['id'] }}</td>
+                    <td>{{ entry['date'] }}</td>
+                    <td>{{ entry['time'] }}</td>
+                    <td><strong>{{ entry['name'] }}</strong></td>
+                    <td>{{ entry['gender'] }}</td>
+                    <td>{{ entry['age'] }}</td>
+                    <td>{{ entry['position'] }}</td>
+                    <td><span class="badge badge-info">{{ entry['purpose'] }}</span></td>
+                    <td>{{ entry['contact_number'] }}</td>
+                    <td>
+                        <div class="btn-group btn-group-sm">
+                            <a href="{{ url_for('admin_logbook_show', id=entry['id']) }}" class="btn btn-info" title="View">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <a href="{{ url_for('admin_logbook_edit', id=entry['id']) }}" class="btn btn-warning" title="Edit">
+                                <i class="fas fa-edit"></i>
+                            </a>
+                            <form id="delete-form-{{ entry['id'] }}" method="POST" action="{{ url_for('admin_logbook_delete', id=entry['id']) }}" style="display: inline;">
+                                <button type="button" class="btn btn-danger" onclick="confirmDelete('delete-form-{{ entry['id'] }}')" title="Delete">
+                                    <i class="fas fa-trash"></i>
+                                </button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        {% else %}
+        <div class="text-center py-4">
+            <i class="fas fa-inbox fa-3x text-muted mb-3"></i>
+            <h4 class="text-muted">No entries found</h4>
+            <p class="text-muted">No logbook entries have been submitted yet.</p>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}
