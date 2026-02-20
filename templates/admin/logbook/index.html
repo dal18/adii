@@ -26,18 +26,31 @@
     padding: 0.5rem 0.3rem;
     vertical-align: middle;
 }
-.data-table th:nth-child(1) { width: 50px; } /* ID */
-.data-table th:nth-child(2) { width: 80px; } /* Date */
-.data-table th:nth-child(3) { width: 70px; } /* Time */
-.data-table th:nth-child(4) { width: 150px; } /* Name */
-.data-table th:nth-child(5) { width: 60px; } /* Gender */
-.data-table th:nth-child(6) { width: 50px; } /* Age */
-.data-table th:nth-child(7) { width: 120px; } /* Position */
-.data-table th:nth-child(8) { width: 100px; } /* Purpose */
-.data-table th:nth-child(9) { width: 100px; } /* Contact */
+.data-table td:nth-child(4) {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.data-table td:nth-child(7),
+.data-table td:nth-child(10) {
+    max-width: 120px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+.data-table th:nth-child(1) { width: 40px; } /* ID */
+.data-table th:nth-child(2) { width: 70px; } /* Date */
+.data-table th:nth-child(3) { width: 60px; } /* Time */
+.data-table th:nth-child(4) { width: 120px; } /* Name */
+.data-table th:nth-child(5) { width: 50px; } /* Gender */
+.data-table th:nth-child(6) { width: 40px; } /* Age */
+.data-table th:nth-child(7) { width: 100px; } /* Position */
+.data-table th:nth-child(8) { width: 80px; } /* Purpose */
+.data-table th:nth-child(9) { width: 90px; } /* Contact */
 .data-table th:nth-child(10) { width: 120px; } /* Address */
-.data-table th:nth-child(11) { width: 80px; } /* Office */
-.data-table th:nth-child(12) { width: 120px; } /* Actions */
+.data-table th:nth-child(11) { width: 60px; } /* Office */
+.data-table th:nth-child(12) { width: 100px; } /* Actions */
 </style>
 <div class="card">
     <div class="card-header">
