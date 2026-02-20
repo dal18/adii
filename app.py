@@ -457,3 +457,7 @@ def admin_logbook_delete(id):
 
 if __name__ == '__main__':
     app.run(debug=True, host='0.0.0.0', port=5000)
+
+# For Railway/Production deployment
+# Railway will use the Procfile to start the app
+# The app is already properly configured for WSGI
