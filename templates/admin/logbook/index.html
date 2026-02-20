@@ -50,6 +50,9 @@
                     <th>Position</th>
                     <th>Purpose</th>
                     <th>Contact</th>
+                    <th>Address</th>
+                    <th>Office</th>
+                    <th>Signature</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -65,6 +68,9 @@
                     <td>{{ entry['position'] }}</td>
                     <td><span class="badge badge-info">{{ entry['purpose'] }}</span></td>
                     <td>{{ entry['contact_number'] }}</td>
+                    <td>{{ entry['address'] or '-' }}</td>
+                    <td>{{ entry['office'] or '-' }}</td>
+                    <td>{{ entry['signature'] or '-' }}</td>
                     <td>
                         <div class="btn-group btn-group-sm">
                             <a href="{{ url_for('admin_logbook_show', id=entry['id']) }}" class="btn btn-info" title="View">

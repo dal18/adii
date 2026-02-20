@@ -313,15 +313,17 @@ def export_to_excel():
         'G': 20,  # Position
         'H': 15,  # Purpose
         'I': 18,  # Contact
-        'J': 40,  # Signature
-        'K': 20   # Created At
+        'J': 25,  # Address
+        'K': 15,  # Office
+        'L': 20,  # Signature
+        'M': 20   # Created At
     }
     
     for col, width in column_widths.items():
         ws.column_dimensions[col].width = width
     
     # Create headers
-    headers = ['ID', 'Date', 'Time', 'Name', 'Gender', 'Age', 'Position', 'Purpose', 'Contact Number', 'Signature', 'Created At']
+    headers = ['ID', 'Date', 'Time', 'Name', 'Gender', 'Age', 'Position', 'Purpose', 'Contact Number', 'Address', 'Office', 'Signature', 'Created At']
     for col_num, header in enumerate(headers, 1):
         cell = ws.cell(row=1, column=col_num, value=header)
         cell.font = header_font
@@ -343,7 +345,9 @@ def export_to_excel():
         ws.cell(row=row_num, column=7, value=entry['position'])
         ws.cell(row=row_num, column=8, value=entry['purpose'])
         ws.cell(row=row_num, column=9, value=entry['contact_number'])
-        ws.cell(row=row_num, column=11, value=entry['created_at'])
+        ws.cell(row=row_num, column=10, value=entry['address'] or '')
+        ws.cell(row=row_num, column=11, value=entry['office'] or '')
+        ws.cell(row=row_num, column=13, value=entry['created_at'])
         
         # Handle signature - add actual signature image to Excel
         if entry['signature']:
@@ -364,9 +368,9 @@ def export_to_excel():
                 img.width = 80
                 img.height = 40
                 
-                # Position the image within the signature cell (column J)
+                # Position image within signature cell (column L)
                 # Simple string anchor for positioning
-                img.anchor = f'J{row_num}'
+                img.anchor = f'L{row_num}'
                 
                 ws.add_image(img)
                 
@@ -375,12 +379,12 @@ def export_to_excel():
                 
             except Exception as e:
                 print(f"Error processing signature for entry {entry['id']}: {e}")
-                ws.cell(row=row_num, column=10, value="[Signature Error]")
+                ws.cell(row=row_num, column=12, value="[Signature Error]")
         else:
-            ws.cell(row=row_num, column=10, value="[No Signature]")
+            ws.cell(row=row_num, column=12, value="[No Signature]")
         
         # Apply borders to data cells
-        for col_num in range(1, 12):
+        for col_num in range(1, 14):
             cell = ws.cell(row=row_num, column=col_num)
             cell.border = border
             cell.alignment = Alignment(vertical='center')
