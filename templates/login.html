@@ -14,13 +14,14 @@
     
     <style>
         :root {
-            --primary: #2d6a4f;
-            --accent: #52b788;
+            --primary: #0038a8; /* Philippine Blue */
+            --accent: #fdc20b; /* Golden Yellow */
+            --secondary: #ce1126; /* Philippine Red */
         }
         
         body {
             font-family: 'Source Sans 3', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
             min-height: 100vh;
             display: flex;
             align-items: center;
@@ -33,19 +34,24 @@
             width: 100%;
             background: white;
             border-radius: 15px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
-            padding: 2.5rem;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            overflow: hidden;
         }
         
         .login-header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--sidebar-hover) 100%);
+            color: white;
             text-align: center;
-            margin-bottom: 2rem;
-            padding-bottom: 1rem;
-            border-bottom: 3px solid var(--accent);
+            padding: 2rem;
+        }
+        
+        .login-header img {
+            height: 50px;
+            margin-bottom: 1rem;
         }
         
         .login-header h2 {
-            color: var(--primary);
+            color: white;
             font-weight: 700;
             margin-bottom: 0.5rem;
         }
@@ -106,7 +112,8 @@
 <body>
     <div class="login-container">
         <div class="login-header">
-            <h2><i class="fas fa-lock"></i> Admin Login</h2>
+            <img src="https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg" alt="DICT Logo">
+            <h2>Admin Login</h2>
             <p>Enter your credentials to access the admin dashboard</p>
         </div>
         

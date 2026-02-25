@@ -3,10 +3,10 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>{% block title %}Admin Dashboard - Logbook System{% endblock %}</title>
-    
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <title>{% block title %}Admin Dashboard — DICT LogBook System{% endblock %}</title>
+
+    <!-- Google Fonts: Encode Sans (gov/tech feel) + Source Sans 3 body -->
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <!-- AdminLTE CSS -->
@@ -15,16 +15,659 @@
     <link href="https://cdn.datatables.net/1.13.7/css/dataTables.bootstrap4.min.css" rel="stylesheet">
     <!-- SweetAlert2 -->
     <link href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css" rel="stylesheet">
-    
+
     <style>
+        /* ═══════════════════════════════════════════
+           DICT COLOR SYSTEM
+           Primary Blue   : #003087 (DICT official dark blue)
+           Mid Blue       : #0056b3
+           Light Blue     : #1976d2
+           Gold / Accent  : #FDB813  (PH flag sun gold)
+           Red            : #CE1126  (PH flag red)
+           White          : #FFFFFF
+           BG             : #EEF2F8
+        ═══════════════════════════════════════════ */
         :root {
-            --primary: #2d6a4f;
-            --accent: #52b788;
-            --sidebar-bg: #1b4332;
-            --sidebar-text: #d8f3dc;
+            --dict-blue:       #003087;
+            --dict-blue-mid:   #0056b3;
+            --dict-blue-light: #1976d2;
+            --dict-gold:       #FDB813;
+            --dict-red:        #CE1126;
+            --dict-white:      #FFFFFF;
+            --dict-bg:         #EEF2F8;
+            --dict-text:       #1a2540;
+            --sidebar-width:   260px;
         }
-        
-        body { font-family: 'Source Sans 3', sans-serif; background: #f4f6f9; }
+
+        /* ── Base ── */
+        body {
+            font-family: 'Source Sans 3', sans-serif;
+            background: var(--dict-bg);
+            color: var(--dict-text);
+        }
+
+        /* ════════════════════════════════
+           TOP STRIP — Philippine flag bar
+        ════════════════════════════════ */
+        .dict-flag-strip {
+            height: 5px;
+            background: linear-gradient(
+                to right,
+                var(--dict-blue)  0%   33.33%,
+                var(--dict-red)   33.33% 66.66%,
+                var(--dict-gold)  66.66% 100%
+            );
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 9999;
+        }
+
+        /* Offset everything below the strip */
+        .wrapper { padding-top: 5px; }
+
+        /* ════════════════════════════════
+           NAVBAR
+        ════════════════════════════════ */
+        .main-header.navbar {
+            background: var(--dict-white) !important;
+            border-bottom: 3px solid var(--dict-blue);
+            box-shadow: 0 2px 12px rgba(0,48,135,.10);
+            min-height: 60px;
+        }
+
+        /* Brand link inside sidebar */
+        .main-header .brand-link {
+            background: var(--dict-blue) !important;
+            border-bottom: 1px solid rgba(255,255,255,.12) !important;
+            padding: 12px 16px !important;
+        }
+
+        .brand-text {
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-weight: 800;
+            font-size: 1.15rem;
+            color: var(--dict-white) !important;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+        }
+
+        /* Breadcrumb nav text */
+        .main-header .nav-link {
+            color: #5a6480 !important;
+            font-size: .88rem;
+        }
+        .main-header .nav-link.font-weight-bold {
+            color: var(--dict-blue) !important;
+        }
+
+        /* User dropdown trigger */
+        .navbar-user-img {
+            border: 2px solid var(--dict-gold);
+            border-radius: 50%;
+        }
+
+        /* ════════════════════════════════
+           SIDEBAR
+        ════════════════════════════════ */
+        .main-sidebar {
+            background: var(--dict-blue) !important;
+            width: var(--sidebar-width) !important;
+        }
+
+        .sidebar { padding-bottom: 16px; }
+
+        /* User panel */
+        .user-panel {
+            border-bottom: 1px solid rgba(255,255,255,.12) !important;
+        }
+        .user-panel .info a {
+            color: var(--dict-white) !important;
+            font-weight: 600;
+            font-size: .9rem;
+        }
+        .user-panel img {
+            border: 2px solid var(--dict-gold) !important;
+        }
+
+        /* Nav headers */
+        .nav-sidebar .nav-header {
+            color: rgba(255,255,255,.50) !important;
+            font-size: .68rem !important;
+            letter-spacing: 1.5px !important;
+            text-transform: uppercase !important;
+            padding: 1rem 1rem .35rem !important;
+            font-weight: 700;
+        }
+
+        /* Nav links */
+        .nav-sidebar .nav-item .nav-link {
+            color: rgba(255,255,255,.85) !important;
+            font-size: .88rem !important;
+            border-radius: 8px !important;
+            margin: 2px 8px !important;
+            padding: 9px 14px !important;
+            transition: background .18s, color .18s !important;
+            font-weight: 500;
+        }
+        .nav-sidebar .nav-item .nav-link i {
+            color: var(--dict-gold) !important;
+            width: 20px;
+        }
+        .nav-sidebar .nav-item .nav-link:hover {
+            background: rgba(255,255,255,.12) !important;
+            color: var(--dict-white) !important;
+        }
+        .nav-sidebar .nav-item .nav-link.active {
+            background: var(--dict-gold) !important;
+            color: var(--dict-blue) !important;
+            font-weight: 700 !important;
+        }
+        .nav-sidebar .nav-item .nav-link.active i {
+            color: var(--dict-blue) !important;
+        }
+
+        /* Sidebar version badge at bottom */
+        .sidebar-version {
+            text-align: center;
+            padding: 12px 16px 4px;
+            font-size: .72rem;
+            color: rgba(255,255,255,.35);
+            letter-spacing: .5px;
+        }
+        .sidebar-divider {
+            border-top: 1px solid rgba(255,255,255,.10);
+            margin: 8px 16px;
+        }
+
+        /* ════════════════════════════════
+           CONTENT AREA
+        ════════════════════════════════ */
+        .content-wrapper { background: var(--dict-bg) !important; }
+
+        .content-header {
+            background: var(--dict-white);
+            border-bottom: 1px solid #dce4f0;
+            box-shadow: 0 1px 4px rgba(0,48,135,.06);
+            padding: 14px 0 !important;
+        }
+
+        .content-header h1 {
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-size: 1.5rem;
+            font-weight: 800;
+            color: var(--dict-blue);
+            letter-spacing: .3px;
+        }
+
+        .breadcrumb {
+            background: transparent;
+            font-size: .82rem;
+            margin-bottom: 0;
+            padding: 0;
+        }
+        .breadcrumb-item a { color: var(--dict-blue-mid); }
+        .breadcrumb-item.active { color: #8898aa; }
+        .breadcrumb-item + .breadcrumb-item::before { color: #b0bec5; }
+
+        /* ── Page sub-header decoration ── */
+        .page-heading-bar {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            margin-bottom: 4px;
+        }
+        .page-heading-bar .heading-icon {
+            width: 42px; height: 42px;
+            background: var(--dict-blue);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--dict-gold);
+            font-size: 1.1rem;
+            flex-shrink: 0;
+        }
+
+        /* ════════════════════════════════
+           CARDS
+        ════════════════════════════════ */
+        .card {
+            border: none;
+            border-radius: 12px;
+            box-shadow: 0 2px 12px rgba(0,48,135,.07);
+        }
+        .card-header {
+            background: var(--dict-white);
+            border-bottom: 3px solid var(--dict-gold);
+            border-radius: 12px 12px 0 0 !important;
+            font-weight: 700;
+            color: var(--dict-blue);
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-size: 1rem;
+            letter-spacing: .3px;
+        }
+        .card-header .card-tools .btn-tool {
+            color: var(--dict-blue-mid);
+        }
+
+        /* Stat cards */
+        .stat-card {
+            border-radius: 14px;
+            overflow: hidden;
+            position: relative;
+            min-height: 110px;
+        }
+        .stat-card .stat-icon {
+            position: absolute;
+            right: -10px; bottom: -10px;
+            font-size: 5rem;
+            opacity: .12;
+            color: var(--dict-white);
+        }
+        .stat-card-blue  { background: linear-gradient(135deg, var(--dict-blue) 0%, var(--dict-blue-mid) 100%); color: #fff; }
+        .stat-card-gold  { background: linear-gradient(135deg, #c98900 0%, var(--dict-gold) 100%); color: #fff; }
+        .stat-card-red   { background: linear-gradient(135deg, var(--dict-red) 0%, #e53935 100%); color: #fff; }
+        .stat-card-teal  { background: linear-gradient(135deg, #00695c 0%, #00897b 100%); color: #fff; }
+
+        /* ════════════════════════════════
+           BUTTONS
+        ════════════════════════════════ */
+        .btn-primary   { background: var(--dict-blue); border-color: var(--dict-blue); }
+        .btn-primary:hover { background: var(--dict-blue-mid); border-color: var(--dict-blue-mid); }
+        .btn-warning   { background: var(--dict-gold); border-color: var(--dict-gold); color: var(--dict-blue) !important; font-weight: 600; }
+        .btn-warning:hover { background: #e6a500; border-color: #e6a500; color: var(--dict-blue) !important; }
+        .btn-danger    { background: var(--dict-red); border-color: var(--dict-red); }
+        .btn-danger:hover { background: #a80e1e; border-color: #a80e1e; }
+
+        /* ════════════════════════════════
+           ALERTS
+        ════════════════════════════════ */
+        .alert {
+            border-radius: 10px;
+            border-left: 5px solid transparent;
+            border-top: none; border-right: none; border-bottom: none;
+        }
+        .alert-success { border-left-color: #28a745; background: #f0fdf4; color: #1a5c2d; }
+        .alert-danger  { border-left-color: var(--dict-red); background: #fff5f5; color: #7b1c26; }
+        .alert-info    { border-left-color: var(--dict-blue-light); background: #f0f7ff; color: #1a3a6e; }
+        .alert-warning { border-left-color: var(--dict-gold); background: #fffbf0; color: #7a5500; }
+
+        /* ════════════════════════════════
+           TABLE & DATATABLES
+        ════════════════════════════════ */
+        .table thead th {
+            background: var(--dict-blue);
+            color: var(--dict-white);
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-size: .88rem;
+            letter-spacing: .5px;
+            text-transform: uppercase;
+            border: none;
+            white-space: nowrap;
+        }
+        .table tbody tr:hover { background: rgba(0,48,135,.04); }
+        .table-striped tbody tr:nth-of-type(odd) { background: rgba(0,48,135,.02); }
+
+        /* ════════════════════════════════
+           FOOTER
+        ════════════════════════════════ */
+        .main-footer {
+            background: var(--dict-blue) !important;
+            border-top: none !important;
+            color: rgba(255,255,255,.7) !important;
+            font-size: .8rem;
+        }
+        .main-footer a { color: var(--dict-gold) !important; }
+        .main-footer strong { color: var(--dict-white) !important; }
+
+        /* ════════════════════════════════
+           BADGE
+        ════════════════════════════════ */
+        .badge-dict-gold  { background: var(--dict-gold); color: var(--dict-blue); font-weight: 700; }
+        .badge-dict-blue  { background: var(--dict-blue); color: #fff; }
+
+        /* ════════════════════════════════
+           SCROLLBAR (webkit)
+        ════════════════════════════════ */
+        ::-webkit-scrollbar { width: 6px; height: 6px; }
+        ::-webkit-scrollbar-track { background: #dce4f0; }
+        ::-webkit-scrollbar-thumb { background: var(--dict-blue-mid); border-radius: 8px; }
+
+        /* ════════════════════════════════
+           RESPONSIVE TWEAKS
+        ════════════════════════════════ */
+        @media (max-width: 768px) {
+            .content-header h1 { font-size: 1.15rem; }
+        }
+    </style>
+
+    {% block styles %}{% endblock %}
+</head>
+
+<body class="hold-transition sidebar-mini layout-fixed">
+
+<!-- Philippine flag color strip -->
+<div class="dict-flag-strip"></div>
+
+<div class="wrapper">
+
+    <!-- ══════════ NAVBAR ══════════ -->
+    <nav class="main-header navbar navbar-expand navbar-white navbar-light">
+        <ul class="navbar-nav">
+            <li class="nav-item">
+                <a class="nav-link" data-widget="pushmenu" href="#" role="button">
+                    <i class="fas fa-bars" style="color:var(--dict-blue);"></i>
+                </a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <a href="{{ url_for('dashboard') }}" class="nav-link">Home</a>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <span class="nav-link text-muted">/</span>
+            </li>
+            <li class="nav-item d-none d-sm-inline-block">
+                <span class="nav-link font-weight-bold">
+                    {% block nav_page_title %}Dashboard{% endblock %}
+                </span>
+            </li>
+        </ul>
+
+        <ul class="navbar-nav ml-auto align-items-center">
+
+            <!-- Notification bell (optional slot) -->
+            <li class="nav-item mr-2">
+                <a href="#" class="nav-link" title="Notifications" style="color:var(--dict-blue);">
+                    <i class="fas fa-bell"></i>
+                </a>
+            </li>
+
+            <!-- User Dropdown -->
+            <li class="nav-item dropdown">
+                <a class="nav-link dropdown-toggle d-flex align-items-center" href="#"
+                   id="userDropdown" role="button"
+                   data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <img src="https://ui-avatars.com/api/?name={{ session.get('admin_username', 'Admin') }}&background=003087&color=FDB813&size=36&bold=true"
+                         class="navbar-user-img mr-2" width="34" height="34" alt="Admin">
+                    <span class="d-none d-md-inline font-weight-bold" style="color:var(--dict-blue); font-size:.88rem;">
+                        {{ session.get('admin_username', 'Administrator') }}
+                    </span>
+                    <i class="fas fa-chevron-down ml-1" style="font-size:.65rem; color:#8898aa;"></i>
+                </a>
+                <div class="dropdown-menu dropdown-menu-right shadow-sm border-0" aria-labelledby="userDropdown"
+                     style="border-radius:10px; min-width:210px; padding:8px 0;">
+                    <div class="px-3 py-2" style="background:var(--dict-bg); border-radius:8px 8px 0 0;">
+                        <small class="text-muted d-block" style="font-size:.72rem; letter-spacing:.5px; text-transform:uppercase;">Signed in as</small>
+                        <div class="font-weight-bold" style="color:var(--dict-blue); font-size:.9rem;">
+                            {{ session.get('admin_username', 'Administrator') }}
+                        </div>
+                        <small class="text-muted">Administrator</small>
+                    </div>
+                    <div class="dropdown-divider my-1"></div>
+                    <a href="{{ url_for('dashboard') }}" class="dropdown-item py-2">
+                        <i class="fas fa-tachometer-alt fa-fw mr-2" style="color:var(--dict-blue);"></i>Dashboard
+                    </a>
+                    <div class="dropdown-divider my-1"></div>
+                    <a href="#" class="dropdown-item py-2 text-danger"
+                       onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                        <i class="fas fa-sign-out-alt fa-fw mr-2"></i>Logout
+                    </a>
+                </div>
+            </li>
+        </ul>
+
+        <!-- Hidden logout form -->
+        <form id="logout-form" method="POST" action="{{ url_for('logout') }}" style="display:none;"></form>
+    </nav>
+
+    <!-- ══════════ SIDEBAR ══════════ -->
+    <aside class="main-sidebar sidebar-dark-primary elevation-4">
+
+        <!-- Brand -->
+        <a href="{{ url_for('dashboard') }}" class="brand-link text-decoration-none">
+            <!-- DICT Official Logo (SVG inline fallback to img) -->
+            <img src="https://www.dict.gov.ph/wp-content/uploads/2016/12/DICT-Logo-Final-White.png"
+                 onerror="this.src='https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg'"
+                 alt="DICT Logo" style="height:36px; margin-right:10px; object-fit:contain;">
+            <span class="brand-text">LogBook Admin</span>
+        </a>
+
+        <div class="sidebar">
+
+            <!-- User Panel -->
+            <div class="user-panel mt-3 pb-3 mb-2 d-flex align-items-center px-3">
+                <div class="image">
+                    <img src="https://ui-avatars.com/api/?name={{ session.get('admin_username', 'Admin') }}&background=FDB813&color=003087&size=42&bold=true"
+                         class="img-circle elevation-1" width="40" height="40" alt="Admin">
+                </div>
+                <div class="info ml-2">
+                    <a href="#" class="d-block font-weight-bold" style="font-size:.88rem;">
+                        {{ session.get('admin_username', 'Administrator') }}
+                    </a>
+                    <small style="color: var(--dict-gold); font-size:.72rem; letter-spacing:.5px; text-transform:uppercase;">
+                        <i class="fas fa-circle" style="font-size:.45rem; vertical-align:middle; margin-right:3px;"></i>
+                        Administrator
+                    </small>
+                </div>
+            </div>
+
+            <!-- Navigation -->
+            <nav class="mt-1">
+                <ul class="nav nav-pills nav-sidebar flex-column px-1"
+                    data-widget="treeview" role="menu" data-accordion="false">
+
+                    <li class="nav-header">MAIN</li>
+
+                    <li class="nav-item">
+                        <a href="{{ url_for('dashboard') }}"
+                           class="nav-link {{ 'active' if request.endpoint == 'dashboard' else '' }}">
+                            <i class="nav-icon fas fa-tachometer-alt"></i>
+                            <p>Dashboard</p>
+                        </a>
+                    </li>
+
+                    <div class="sidebar-divider"></div>
+                    <li class="nav-header">LOGBOOK</li>
+
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_logbook_index') }}"
+                           class="nav-link {{ 'active' if request.endpoint == 'admin_logbook_index' and not request.args.get('filter') else '' }}">
+                            <i class="nav-icon fas fa-book"></i>
+                            <p>All Entries</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_logbook_index') }}?filter=today"
+                           class="nav-link {{ 'active' if request.args.get('filter') == 'today' else '' }}">
+                            <i class="nav-icon fas fa-calendar-day"></i>
+                            <p>Today's Log</p>
+                            <!-- Optional live badge -->
+                            {# <span class="badge badge-dict-gold badge-pill ml-auto">12</span> #}
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="{{ url_for('admin_logbook_index') }}?filter=pending"
+                           class="nav-link {{ 'active' if request.args.get('filter') == 'pending' else '' }}">
+                            <i class="nav-icon fas fa-clock"></i>
+                            <p>Pending</p>
+                        </a>
+                    </li>
+
+                    <div class="sidebar-divider"></div>
+                    <li class="nav-header">REPORTS</li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-chart-bar"></i>
+                            <p>Analytics</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-file-export"></i>
+                            <p>Export Logs</p>
+                        </a>
+                    </li>
+
+                    <div class="sidebar-divider"></div>
+                    <li class="nav-header">SETTINGS</li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-users-cog"></i>
+                            <p>Manage Users</p>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a href="#" class="nav-link">
+                            <i class="nav-icon fas fa-cog"></i>
+                            <p>System Settings</p>
+                        </a>
+                    </li>
+
+                </ul>
+            </nav>
+
+            <!-- Sidebar bottom version info -->
+            <div class="sidebar-version">
+                <i class="fas fa-shield-alt mr-1" style="color:var(--dict-gold);"></i>
+                DICT LogBook &nbsp;v1.0.0
+            </div>
+
+        </div>
+    </aside>
+
+    <!-- ══════════ CONTENT WRAPPER ══════════ -->
+    <div class="content-wrapper">
+
+        <!-- Content Header / Page Title Bar -->
+        <div class="content-header">
+            <div class="container-fluid">
+                <div class="row align-items-center">
+                    <div class="col-sm-6">
+                        <h1 class="m-0">
+                            {% block page_title %}Dashboard{% endblock %}
+                        </h1>
+                    </div>
+                    <div class="col-sm-6">
+                        <ol class="breadcrumb float-sm-right">
+                            <li class="breadcrumb-item">
+                                <a href="{{ url_for('dashboard') }}">
+                                    <i class="fas fa-home mr-1"></i>Home
+                                </a>
+                            </li>
+                            {% block breadcrumb %}{% endblock %}
+                        </ol>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="content" style="padding: 20px 0;">
+            <div class="container-fluid">
+
+                <!-- ── Flash Messages ── -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show shadow-sm mb-3">
+                                <i class="fas fa-{{ 'check-circle' if category == 'success' else 'exclamation-triangle' if category in ('error','danger') else 'info-circle' }} mr-2"></i>
+                                {{ message }}
+                                <button type="button" class="close" data-dismiss="alert">
+                                    <span>&times;</span>
+                                </button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                {% block content %}{% endblock %}
+
+            </div>
+        </div>
+    </div>
+
+    <!-- ══════════ FOOTER ══════════ -->
+    <footer class="main-footer d-flex flex-wrap justify-content-between align-items-center px-4 py-2">
+        <span>
+            <img src="https://www.dict.gov.ph/wp-content/uploads/2016/12/DICT-Logo-Final-White.png"
+                 onerror="this.style.display='none'"
+                 alt="DICT" style="height:22px; margin-right:8px; opacity:.7; vertical-align:middle;">
+            <strong>Department of Information and Communications Technology</strong>
+            &nbsp;&copy; 2026 — All rights reserved.
+        </span>
+        <span style="font-size:.75rem;">
+            <i class="fas fa-code mr-1" style="color:var(--dict-gold);"></i>
+            LogBook System &nbsp;<b style="color:var(--dict-gold);">v1.0.0</b>
+        </span>
+    </footer>
+
+</div><!-- /.wrapper -->
+
+
+<!-- ══════════ SCRIPTS ══════════ -->
+<!-- 1. jQuery -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<!-- 2. Bootstrap 4 bundle (includes Popper) -->
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+<!-- 3. AdminLTE -->
+<script src="https://cdn.jsdelivr.net/npm/admin-lte@3.2/dist/js/adminlte.min.js"></script>
+<!-- 4. Chart.js -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.1/dist/chart.umd.min.js"></script>
+<!-- 5. DataTables -->
+<script src="https://cdn.datatables.net/1.13.7/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap4.min.js"></script>
+<!-- 6. SweetAlert2 -->
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.all.min.js"></script>
+<!-- 7. Signature Pad -->
+<script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
+
+<script>
+    /* Auto-dismiss alerts */
+    setTimeout(() => { $('.alert').fadeOut('slow'); }, 5000);
+
+    /* DataTables */
+    $(document).ready(function () {
+        if ($('.data-table').length) {
+            $('.data-table').DataTable({
+                responsive: true,
+                pageLength: 15,
+                order: [[0, 'desc']],
+                language: { searchPlaceholder: 'Search entries...' },
+                dom: "<'row'<'col-sm-6'l><'col-sm-6'f>>" +
+                     "<'row'<'col-sm-12'tr>>" +
+                     "<'row'<'col-sm-5'i><'col-sm-7'p>>"
+            });
+        }
+    });
+
+    /* Global SweetAlert delete confirm */
+    function confirmDelete(formId) {
+        Swal.fire({
+            title: 'Delete this entry?',
+            text: 'This action cannot be undone.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#CE1126',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: '<i class="fas fa-trash mr-1"></i> Yes, delete it!',
+            cancelButtonText: 'Cancel',
+            customClass: { popup: 'rounded' }
+        }).then((result) => {
+            if (result.isConfirmed) {
+                document.getElementById(formId).submit();
+            }
+        });
+    }
+</script>
+
+{% block scripts %}{% endblock %}
+</body>
+</html>
         
         /* Navbar */
         .main-header.navbar { background: #fff; border-bottom: 2px solid var(--accent); box-shadow: 0 2px 8px rgba(0,0,0,.06); }
@@ -34,10 +677,10 @@
         /* Sidebar */
         .main-sidebar { background: var(--sidebar-bg) !important; }
         .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link.active,
-        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link:hover { background: var(--primary); border-radius: 6px; }
+        .sidebar-dark-primary .nav-sidebar > .nav-item > .nav-link:hover { background: var(--sidebar-hover); border-radius: 6px; }
         .nav-sidebar .nav-link { color: var(--sidebar-text) !important; font-size: .92rem; transition: all .2s; }
         .nav-sidebar .nav-link i { color: var(--accent) !important; }
-        .nav-sidebar .nav-header { color: rgba(255,255,255,.4); font-size: .7rem; letter-spacing: 1.2px; text-transform: uppercase; padding: 1rem 1rem .4rem; }
+        .nav-sidebar .nav-header { color: rgba(255,255,255,.7); font-size: .7rem; letter-spacing: 1.2px; text-transform: uppercase; padding: 1rem 1rem .4rem; }
         .user-panel .info a { color: var(--sidebar-text) !important; }
         .user-panel img { border: 2px solid var(--accent); }
         
@@ -51,7 +694,11 @@
         
         /* Buttons */
         .btn-primary { background: var(--primary); border-color: var(--primary); }
-        .btn-primary:hover { background: var(--accent); border-color: var(--accent); }
+        .btn-primary:hover { background: var(--sidebar-hover); border-color: var(--sidebar-hover); }
+        .btn-warning { background: var(--accent); border-color: var(--accent); color: #000; }
+        .btn-warning:hover { background: #e6ac00; border-color: #e6ac00; color: #000; }
+        .btn-danger { background: var(--secondary); border-color: var(--secondary); }
+        .btn-danger:hover { background: #b30d20; border-color: #b30d20; }
         
         /* Footer */
         .main-footer { background: #fff; border-top: 1px solid #e2e8f0; font-size: .82rem; color: #6c757d; }
@@ -121,7 +768,7 @@
     <!-- SIDEBAR -->
     <aside class="main-sidebar sidebar-dark-primary elevation-4">
         <a href="{{ url_for('dashboard') }}" class="brand-link text-center px-3">
-            <i class="fas fa-book-open fa-lg mr-2" style="color:var(--accent);"></i>
+            <img src="https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg" alt="DICT Logo" style="height: 35px; margin-right: 10px;">
             <span class="brand-text">LogBook Admin</span>
         </a>
         

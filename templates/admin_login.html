@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "admin/layout.html" %}
 
 {% block title %}Admin Login - Logbook System{% endblock %}
 
@@ -10,12 +10,26 @@
 {% endblock %}
 
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-6">
-        <div class="card">
-            <div class="card-header">
-                <h3 class="card-title">Administrator Login</h3>
-            </div>
+<style>
+    .login-card {
+        max-width: 450px;
+        margin: 2rem auto;
+    }
+    .login-card .card-header {
+        background: linear-gradient(135deg, var(--primary) 0%, var(--sidebar-hover) 100%);
+        color: white;
+        text-align: center;
+        border: none;
+    }
+</style>
+<div class="login-card">
+    <div class="card">
+        <div class="card-header">
+            <h3 class="card-title mb-0">
+                <img src="https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg" alt="DICT Logo" style="height: 30px; margin-right: 10px;">
+                Administrator Login
+            </h3>
+        </div>
             <div class="card-body">
                 {% with messages = get_flashed_messages(with_categories=true) %}
                     {% if messages %}

@@ -18,13 +18,14 @@
     
     <style>
         :root {
-            --primary: #2d6a4f;
-            --accent: #52b788;
+            --primary: #0038a8; /* Philippine Blue */
+            --accent: #fdc20b; /* Golden Yellow */
+            --secondary: #ce1126; /* Philippine Red */
         }
         
         body {
             font-family: 'Source Sans 3', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e8f5e9 100%);
+            background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
             min-height: 100vh;
             padding: 2rem 0;
         }
@@ -32,6 +33,11 @@
         .logo-container {
             text-align: center;
             margin-bottom: 2rem;
+        }
+        
+        .logo-container img {
+            height: 60px;
+            margin-bottom: 1rem;
         }
         
         .logo-container h1 {
@@ -75,8 +81,8 @@
         }
         
         .form-control:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 0.2rem rgba(82, 183, 136, 0.25);
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(0, 56, 168, 0.25);
         }
         
         .form-control[readonly] {
@@ -107,8 +113,8 @@
         }
         
         .btn-primary:hover {
-            background: var(--accent);
-            border-color: var(--accent);
+            background: #0056b3;
+            border-color: #0056b3;
         }
         
         .alert {
@@ -131,7 +137,7 @@
         }
         
         footer a:hover {
-            color: var(--accent);
+            color: #0056b3;
             text-decoration: underline;
         }
         
@@ -152,7 +158,8 @@
         }
         
         #address-suggestions .list-group-item:hover {
-            background-color: #f8f9fa;
+            background-color: var(--accent);
+            color: #000;
         }
         
         #address-suggestions .list-group-item:last-child {
@@ -168,7 +175,8 @@
     <div class="container">
         <!-- Logo/Institution Name -->
         <div class="logo-container">
-            <h1><i class="fas fa-book-open"></i> Visitor Logbook</h1>
+            <img src="https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg" alt="DICT Logo">
+            <h1>Visitor Logbook</h1>
             <p>Please fill out the form below to register your visit</p>
         </div>
         
