@@ -17,9 +17,9 @@
     <script src="https://cdn.jsdelivr.net/npm/signature_pad@4.1.7/dist/signature_pad.umd.min.js"></script>
 
     <style>
-        /* ══════════════════════════════════
+        /* ══════════════════════════════════════
            DICT COLOR SYSTEM
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         :root {
             --dict-blue:       #003087;
             --dict-blue-mid:   #0056b3;
@@ -42,9 +42,9 @@
             margin: 0;
         }
 
-        /* ══════════════════════════════════
+        /* ══════════════════════════════════════
            FLAG STRIP
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         .flag-strip {
             height: 6px;
             background: linear-gradient(
@@ -58,9 +58,9 @@
             z-index: 9999;
         }
 
-        /* ════════════════════════════════════
+        /* ══════════════════════════════════════
            TOP GOVERNMENT BANNER
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         .gov-banner {
             background: var(--dict-blue);
             padding: 14px 0 12px;
@@ -106,9 +106,9 @@
             margin-top: 12px;
         }
 
-        /* ════════════════════════════════════
+        /* ══════════════════════════════════════
            PAGE LAYOUT
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         .page-body {
             padding: 2rem 1rem 3rem;
         }
@@ -138,9 +138,9 @@
             margin: 8px auto 0;
         }
 
-        /* ════════════════════════════════════
+        /* ══════════════════════════════════════
            FORM CARD
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         .form-card {
             max-width: 860px;
             margin: 0 auto;
@@ -260,9 +260,9 @@
             padding-left: 34px;
         }
 
-        /* ════════════════════════════════════
+        /* ══════════════════════════════════════
            SIGNATURE PAD
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         .sig-wrap {
             border: 2px dashed #ccd5e8;
             border-radius: 10px;
@@ -289,9 +289,9 @@
             touch-action: none;
         }
 
-        /* ════════════════════════════════════
+        /* ══════════════════════════════════════
            SUBMIT BUTTON
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         .btn-submit {
             background: var(--dict-blue);
             border: none;
@@ -333,7 +333,7 @@
 
         /* ══════════════════════════════════════
            ALERTS
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         .alert {
             border-radius: 10px;
             border-left: 5px solid transparent;
@@ -345,9 +345,9 @@
         .alert-info    { border-left-color: var(--dict-blue-light); background: #f0f7ff; color: #1a3a6e; }
         .alert-warning { border-left-color: var(--dict-gold); background: #fffbf0; color: #7a5500; }
 
-        /* ════════════════════════════════════
+        /* ══════════════════════════════════════
            ADDRESS AUTOCOMPLETE
-        ════════════════════════════════════ */
+        ══════════════════════════════════════ */
         #address-suggestions {
             border: 1.5px solid #d0d9ea;
             border-radius: 8px;
@@ -715,7 +715,6 @@
         const inp = document.getElementById('custom_office');
         const show = sel.value === 'None';
         inp.style.display = show ? 'block' : 'none';
-        inp.required = show;
         if (!show) inp.value = '';
     }
 
