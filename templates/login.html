@@ -3,170 +3,530 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Admin Login - Logbook System</title>
-    
+    <title>Admin Login — DICT LogBook System</title>
+
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Encode+Sans+Condensed:wght@600;700;800;900&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <!-- Font Awesome -->
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
     <!-- Bootstrap 4 -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css" rel="stylesheet">
-    
+
     <style>
+        /* ══════════════════════════════════════
+           DICT COLOR SYSTEM
+        ══════════════════════════════════════ */
         :root {
-            --primary: #0038a8; /* Philippine Blue */
-            --accent: #fdc20b; /* Golden Yellow */
-            --secondary: #ce1126; /* Philippine Red */
+            --dict-blue:       #003087;
+            --dict-blue-mid:   #0056b3;
+            --dict-blue-light: #1976d2;
+            --dict-gold:       #FDB813;
+            --dict-red:        #CE1126;
+            --dict-white:      #FFFFFF;
+            --dict-bg:         #EEF2F8;
+            --dict-text:       #1a2540;
         }
-        
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
         body {
             font-family: 'Source Sans 3', sans-serif;
-            background: linear-gradient(135deg, #f5f7fa 0%, #e3f2fd 100%);
             min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            background: var(--dict-bg);
+            color: var(--dict-text);
+        }
+
+        /* ══════════════════════════════════════
+           FLAG STRIP
+        ══════════════════════════════════════ */
+        .flag-strip {
+            height: 6px;
+            flex-shrink: 0;
+            background: linear-gradient(
+                to right,
+                var(--dict-blue)  0%   33.33%,
+                var(--dict-red)   33.33% 66.66%,
+                var(--dict-gold)  66.66% 100%
+            );
+        }
+
+        /* ══════════════════════════════════════
+           TWO-COLUMN LAYOUT
+        ══════════════════════════════════════ */
+        .login-wrap {
+            flex: 1;
+            display: flex;
+            min-height: calc(100vh - 6px);
+        }
+
+        /* ── Left panel (branding) ── */
+        .brand-panel {
+            display: none; /* hidden on mobile */
+            flex: 1;
+            background: var(--dict-blue);
+            position: relative;
+            overflow: hidden;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 48px 44px;
+        }
+
+        /* Decorative circles */
+        .brand-panel::before {
+            content: '';
+            position: absolute;
+            width: 420px; height: 420px;
+            border-radius: 50%;
+            border: 60px solid rgba(255,255,255,.04);
+            top: -80px; left: -80px;
+        }
+        .brand-panel::after {
+            content: '';
+            position: absolute;
+            width: 320px; height: 320px;
+            border-radius: 50%;
+            border: 50px solid rgba(253,184,19,.07);
+            bottom: -60px; right: -60px;
+        }
+
+        .brand-panel-inner {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+        }
+
+        .brand-panel img.bp-logo {
+            height: 80px;
+            object-fit: contain;
+            filter: brightness(0) invert(1);
+            margin-bottom: 28px;
+        }
+
+        .brand-panel h1 {
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--dict-white);
+            letter-spacing: .5px;
+            margin-bottom: 10px;
+            line-height: 1.25;
+        }
+        .brand-panel p {
+            font-size: .9rem;
+            color: rgba(255,255,255,.55);
+            line-height: 1.6;
+            max-width: 300px;
+            margin: 0 auto 32px;
+        }
+
+        .brand-divider {
+            width: 48px; height: 3px;
+            background: var(--dict-gold);
+            border-radius: 4px;
+            margin: 0 auto 28px;
+        }
+
+        /* Feature pills */
+        .feature-pills {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            text-align: left;
+        }
+        .feature-pill {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            background: rgba(255,255,255,.07);
+            border-radius: 10px;
+            padding: 12px 16px;
+            border: 1px solid rgba(255,255,255,.08);
+        }
+        .feature-pill .pill-icon {
+            width: 34px; height: 34px;
+            background: rgba(253,184,19,.15);
+            border-radius: 8px;
+            display: flex; align-items: center; justify-content: center;
+            color: var(--dict-gold);
+            font-size: .9rem;
+            flex-shrink: 0;
+        }
+        .feature-pill .pill-text {
+            font-size: .83rem;
+            color: rgba(255,255,255,.75);
+            font-weight: 500;
+        }
+
+        /* ── Right panel (login form) ── */
+        .form-panel {
+            width: 100%;
+            max-width: 480px;
+            margin: 0 auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            padding: 40px 36px;
+            background: var(--dict-white);
+        }
+
+        /* Mobile: full width; Desktop: fixed right col */
+        @media (min-width: 860px) {
+            .brand-panel { display: flex; }
+            .form-panel {
+                width: 440px;
+                flex-shrink: 0;
+                margin: 0;
+                box-shadow: -4px 0 24px rgba(0,48,135,.08);
+            }
+        }
+
+        /* ── Form panel: top logo (mobile only) ── */
+        .mobile-logo {
+            text-align: center;
+            margin-bottom: 28px;
+            display: block;
+        }
+        .mobile-logo img {
+            height: 52px;
+            object-fit: contain;
+            margin-bottom: 10px;
+        }
+        .mobile-logo .mobile-agency {
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-size: 1rem;
+            font-weight: 800;
+            color: var(--dict-blue);
+            letter-spacing: .3px;
+        }
+
+        @media (min-width: 860px) {
+            .mobile-logo { display: none; }
+        }
+
+        /* ── Login heading ── */
+        .login-heading {
+            margin-bottom: 28px;
+        }
+        .login-heading .label-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            background: rgba(0,48,135,.08);
+            color: var(--dict-blue);
+            font-size: .72rem;
+            font-weight: 700;
+            letter-spacing: 1.2px;
+            text-transform: uppercase;
+            padding: 4px 10px;
+            border-radius: 20px;
+            margin-bottom: 12px;
+        }
+        .login-heading h2 {
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-size: 1.75rem;
+            font-weight: 800;
+            color: var(--dict-blue);
+            margin-bottom: 6px;
+            letter-spacing: .3px;
+        }
+        .login-heading p {
+            font-size: .88rem;
+            color: #6b7a99;
+        }
+
+        /* Gold accent underline */
+        .heading-bar {
+            width: 44px; height: 3px;
+            background: var(--dict-gold);
+            border-radius: 4px;
+            margin: 10px 0 0;
+        }
+
+        /* ── Form elements ── */
+        .form-group label {
+            font-weight: 600;
+            font-size: .87rem;
+            color: #3a4568;
+            margin-bottom: .45rem;
+            display: block;
+        }
+
+        .input-wrap {
+            position: relative;
+        }
+        .input-wrap .inp-icon {
+            position: absolute;
+            left: 13px; top: 50%;
+            transform: translateY(-50%);
+            color: var(--dict-blue-mid);
+            font-size: .85rem;
+            pointer-events: none;
+        }
+        .input-wrap input {
+            width: 100%;
+            padding: .62rem .9rem .62rem 38px;
+            border: 1.5px solid #d0d9ea;
+            border-radius: 9px;
+            font-size: .92rem;
+            font-family: 'Source Sans 3', sans-serif;
+            color: var(--dict-text);
+            transition: border .18s, box-shadow .18s;
+            background: #f8faff;
+        }
+        .input-wrap input:focus {
+            border-color: var(--dict-blue);
+            box-shadow: 0 0 0 3px rgba(0,48,135,.10);
+            background: var(--dict-white);
+            outline: none;
+        }
+        .input-wrap input::placeholder { color: #aab4cc; }
+
+        /* Toggle password visibility */
+        .toggle-pw {
+            position: absolute;
+            right: 12px; top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: #aab4cc;
+            cursor: pointer;
+            font-size: .88rem;
+            padding: 0 4px;
+            transition: color .18s;
+        }
+        .toggle-pw:hover { color: var(--dict-blue); }
+        .input-wrap input[type="password"] { padding-right: 38px; }
+
+        /* ── Submit button ── */
+        .btn-login {
+            width: 100%;
+            background: var(--dict-blue);
+            border: none;
+            color: var(--dict-white);
+            font-family: 'Encode Sans Condensed', sans-serif;
+            font-size: 1.05rem;
+            font-weight: 700;
+            letter-spacing: .8px;
+            text-transform: uppercase;
+            padding: .78rem 1rem;
+            border-radius: 10px;
+            transition: background .2s, transform .15s, box-shadow .2s;
+            box-shadow: 0 4px 14px rgba(0,48,135,.22);
+            cursor: pointer;
             display: flex;
             align-items: center;
             justify-content: center;
-            padding: 2rem;
+            gap: 8px;
+            margin-top: 6px;
         }
-        
-        .login-container {
-            max-width: 450px;
-            width: 100%;
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
-            overflow: hidden;
+        .btn-login:hover {
+            background: var(--dict-blue-mid);
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,48,135,.3);
         }
-        
-        .login-header {
-            background: linear-gradient(135deg, var(--primary) 0%, var(--sidebar-hover) 100%);
-            color: white;
-            text-align: center;
-            padding: 2rem;
-        }
-        
-        .login-header img {
-            height: 50px;
-            margin-bottom: 1rem;
-        }
-        
-        .login-header h2 {
-            color: white;
-            font-weight: 700;
-            margin-bottom: 0.5rem;
-        }
-        
-        .login-header p {
-            color: #6c757d;
-            font-size: 0.95rem;
-        }
-        
-        .form-group label {
-            font-weight: 600;
-            color: #495057;
-            margin-bottom: 0.5rem;
-        }
-        
-        .form-control:focus {
-            border-color: var(--accent);
-            box-shadow: 0 0 0 0.2rem rgba(82, 183, 136, 0.25);
-        }
-        
-        .btn-primary {
-            background: var(--primary);
-            border-color: var(--primary);
-            padding: 0.75rem;
-            font-weight: 600;
-            width: 100%;
-        }
-        
-        .btn-primary:hover {
-            background: var(--accent);
-            border-color: var(--accent);
-        }
-        
+        .btn-login:active { transform: translateY(0); }
+
+        /* ── Alerts ── */
         .alert {
-            border-radius: 8px;
-            border: none;
+            border-radius: 10px;
+            border-left: 5px solid transparent;
+            border-top: none; border-right: none; border-bottom: none;
+            font-size: .88rem;
+            margin-bottom: 20px;
+            padding: 12px 16px;
         }
-        
+        .alert-danger  { border-left-color: var(--dict-red);  background: #fff5f5; color: #7b1c26; }
+        .alert-success { border-left-color: #28a745; background: #f0fdf4; color: #1a5c2d; }
+        .alert-info    { border-left-color: var(--dict-blue-light); background: #f0f7ff; color: #1a3a6e; }
+        .close { color: inherit; opacity: .6; }
+        .close:hover { opacity: 1; }
+
+        /* ── Back link ── */
         .back-link {
             text-align: center;
-            margin-top: 1.5rem;
-            padding-top: 1.5rem;
-            border-top: 1px solid #dee2e6;
+            margin-top: 22px;
+            padding-top: 18px;
+            border-top: 1px solid #eef2f8;
+            font-size: .86rem;
         }
-        
         .back-link a {
-            color: var(--primary);
+            color: var(--dict-blue-mid);
             text-decoration: none;
-            font-weight: 500;
+            font-weight: 600;
+            transition: color .18s;
         }
-        
-        .back-link a:hover {
-            color: var(--accent);
-            text-decoration: underline;
+        .back-link a:hover { color: var(--dict-blue); }
+
+        /* ── Security notice ── */
+        .security-note {
+            margin-top: 18px;
+            text-align: center;
+            font-size: .74rem;
+            color: #aab4cc;
+            line-height: 1.5;
         }
+        .security-note i { color: var(--dict-gold); margin-right: 4px; }
+
+        /* ── Footer ── */
+        .login-footer {
+            text-align: center;
+            padding: 12px;
+            font-size: .76rem;
+            color: rgba(255,255,255,.5);
+            background: var(--dict-blue);
+            flex-shrink: 0;
+        }
+        .login-footer strong { color: rgba(255,255,255,.8); }
     </style>
 </head>
 <body>
-    <div class="login-container">
-        <div class="login-header">
-            <img src="https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg" alt="DICT Logo">
+
+<!-- Philippine flag strip -->
+<div class="flag-strip"></div>
+
+<div class="login-wrap">
+
+    <!-- ══ Left: Brand Panel ══ -->
+    <div class="brand-panel">
+        <div class="brand-panel-inner">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/DICT_Ph_Logo.svg/200px-DICT_Ph_Logo.svg.png"
+                 onerror="this.src='https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg'"
+                 alt="DICT Logo" class="bp-logo">
+
+            <h1>Department of Information &amp; Communications Technology</h1>
+            <div class="brand-divider"></div>
+            <p>Secure administrative access to the DICT Visitor Logbook Management System</p>
+
+            <div class="feature-pills">
+                <div class="feature-pill">
+                    <div class="pill-icon"><i class="fas fa-book"></i></div>
+                    <div class="pill-text">Real-time Visitor Log Management</div>
+                </div>
+                <div class="feature-pill">
+                    <div class="pill-icon"><i class="fas fa-chart-bar"></i></div>
+                    <div class="pill-text">Analytics & Reporting Dashboard</div>
+                </div>
+                <div class="feature-pill">
+                    <div class="pill-icon"><i class="fas fa-shield-alt"></i></div>
+                    <div class="pill-text">Secured under RA 10173 — Data Privacy Act</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ══ Right: Login Form ══ -->
+    <div class="form-panel">
+
+        <!-- Mobile logo -->
+        <div class="mobile-logo">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/4/47/DICT_Ph_Logo.svg/200px-DICT_Ph_Logo.svg.png"
+                 onerror="this.src='https://www.bworldonline.com/wp-content/uploads/2021/12/DICT-logo.jpg'"
+                 alt="DICT Logo">
+            <div class="mobile-agency">DICT — LogBook System</div>
+        </div>
+
+        <!-- Heading -->
+        <div class="login-heading">
+            <div class="label-chip">
+                <i class="fas fa-lock"></i> Restricted Access
+            </div>
             <h2>Admin Login</h2>
             <p>Enter your credentials to access the admin dashboard</p>
+            <div class="heading-bar"></div>
         </div>
-        
+
         <!-- Flash Messages -->
         {% with messages = get_flashed_messages(with_categories=true) %}
             {% if messages %}
                 {% for category, message in messages %}
                     <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
-                        <i class="fas fa-{{ 'exclamation-circle' if category == 'danger' else 'info-circle' }} mr-2"></i>
+                        <i class="fas fa-{{ 'exclamation-triangle' if category in ('error','danger') else 'info-circle' }} mr-2"></i>
                         {{ message }}
-                        <button type="button" class="close" data-dismiss="alert">
-                            <span>&times;</span>
-                        </button>
+                        <button type="button" class="close" data-dismiss="alert"><span>&times;</span></button>
                     </div>
                 {% endfor %}
             {% endif %}
         {% endwith %}
-        
-        <form method="POST">
+
+        <!-- Login Form -->
+        <form method="POST" id="login-form">
             <div class="form-group">
                 <label for="username"><i class="fas fa-user mr-1"></i>Username</label>
-                <input type="text" class="form-control" id="username" name="username" placeholder="Enter username" required autofocus>
+                <div class="input-wrap">
+                    <i class="inp-icon fas fa-user"></i>
+                    <input type="text" id="username" name="username"
+                           placeholder="Enter your username"
+                           required autofocus autocomplete="username">
+                </div>
             </div>
-            
+
             <div class="form-group">
                 <label for="password"><i class="fas fa-key mr-1"></i>Password</label>
-                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+                <div class="input-wrap">
+                    <i class="inp-icon fas fa-lock"></i>
+                    <input type="password" id="password" name="password"
+                           placeholder="Enter your password"
+                           required autocomplete="current-password">
+                    <button type="button" class="toggle-pw" id="toggle-pw" title="Show/hide password">
+                        <i class="fas fa-eye" id="pw-eye"></i>
+                    </button>
+                </div>
             </div>
-            
-            <div class="form-group">
-                <button type="submit" class="btn btn-primary">
-                    <i class="fas fa-sign-in-alt mr-2"></i>Login
-                </button>
-            </div>
+
+            <button type="submit" class="btn-login">
+                <i class="fas fa-sign-in-alt"></i>
+                Sign In
+            </button>
         </form>
-        
+
+        <!-- Back link -->
         <div class="back-link">
             <a href="{{ url_for('home') }}">
-                <i class="fas fa-arrow-left mr-1"></i>Back to Home
+                <i class="fas fa-arrow-left mr-1"></i>Back to Visitor Logbook
             </a>
         </div>
-    </div>
-    
-    <!-- jQuery -->
-    <script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
-    <!-- Bootstrap 4 -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
-    
-    <script>
-        // Auto-dismiss flash alerts after 5 seconds
-        setTimeout(() => {
-            $('.alert').fadeOut('slow');
-        }, 5000);
-    </script>
+
+        <!-- Security notice -->
+        <div class="security-note">
+            <i class="fas fa-shield-alt"></i>
+            This is a secured government system. Unauthorized access is prohibited<br>
+            and may be subject to penalties under Philippine law.
+        </div>
+
+    </div><!-- /.form-panel -->
+</div><!-- /.login-wrap -->
+
+<!-- Footer -->
+<footer class="login-footer">
+    <strong>DICT Visitor LogBook System</strong> &nbsp;&mdash;&nbsp; &copy; 2026 Department of Information and Communications Technology. All rights reserved.
+</footer>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/jquery@3.7.1/dist/jquery.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/js/bootstrap.bundle.min.js"></script>
+
+<script>
+    /* Auto-dismiss alerts */
+    setTimeout(() => { $('.alert').fadeOut('slow'); }, 5000);
+
+    /* Toggle password visibility */
+    document.getElementById('toggle-pw').addEventListener('click', function () {
+        const pw  = document.getElementById('password');
+        const eye = document.getElementById('pw-eye');
+        if (pw.type === 'password') {
+            pw.type = 'text';
+            eye.classList.replace('fa-eye', 'fa-eye-slash');
+            this.setAttribute('title', 'Hide password');
+        } else {
+            pw.type = 'password';
+            eye.classList.replace('fa-eye-slash', 'fa-eye');
+            this.setAttribute('title', 'Show password');
+        }
+    });
+</script>
+
 </body>
 </html>
