@@ -292,6 +292,21 @@
         .alert-info    { border-left-color: var(--dict-blue-light); background: #f0f7ff; color: #1a3a6e; }
         .alert-warning { border-left-color: var(--dict-gold); background: #fffbf0; color: #7a5500; }
 
+        /* ══════════════════════════════
+           SIDEBAR COLLAPSED STATE
+        ══════════════════════════════ */
+        .content-wrapper.sidebar-collapsed,
+        .main-footer.sidebar-collapsed {
+            margin-left: 0 !important;
+            transition: margin-left 0.3s ease;
+        }
+        
+        .content-wrapper:not(.sidebar-collapsed),
+        .main-footer:not(.sidebar-collapsed) {
+            margin-left: var(--sidebar-width);
+            transition: margin-left 0.3s ease;
+        }
+
         /* ════════════════════════════════
            TABLE & DATATABLES
         ════════════════════════════════ */
@@ -629,6 +644,23 @@
 <script>
     /* Auto-dismiss alerts */
     setTimeout(() => { $('.alert').fadeOut('slow'); }, 5000);
+
+    /* Fix sidebar toggle to expand content */
+    $(document).ready(function() {
+        // Listen for sidebar toggle events
+        $(document).on('collapsed.lte.pushmenu', function() {
+            $('.content-wrapper, .main-footer').addClass('sidebar-collapsed');
+        });
+        
+        $(document).on('expanded.lte.pushmenu', function() {
+            $('.content-wrapper, .main-footer').removeClass('sidebar-collapsed');
+        });
+        
+        // Initial state check
+        if ($('body').hasClass('sidebar-collapse')) {
+            $('.content-wrapper, .main-footer').addClass('sidebar-collapsed');
+        }
+    });
 
     /* DataTables */
     $(document).ready(function () {
